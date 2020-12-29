@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+#development.json file in the config folder
+config/development.json
