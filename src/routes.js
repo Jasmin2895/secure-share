@@ -1,9 +1,9 @@
 import express from 'express';
 
 import { log } from './utils';
-const payloads = require('./payloads');
+const payloads = require('./payload');
 const api = require("./api")
-import { generateQRCode } from './modules/qrCodes';
+import { generateQRCode } from './module/qrCodes';
 
 const router = new express.Router();
 const debug = require('debug')('slash-command-template:index');
@@ -30,9 +30,10 @@ router.post('/slack/actions', async (req, res) => {
         let response;
         let msgToEncode = slackReqObj.view.state.values["secure-share"]["secure-share-msg"].value
         let response_url = slackReqObj.response_urls[0].response_url
+        let channel_id = slackReqObj.response_urls[0].channel_id
 
         if (slackReqObj.type === "view_submission") {
-            response = await generateQRCode({ msgToEncode, response_url })
+            response = await generateQRCode({ msgToEncode, response_url, channel_id })
         }
         return res.send();
     } catch (err) {

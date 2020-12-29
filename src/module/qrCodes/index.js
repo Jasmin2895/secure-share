@@ -62,7 +62,7 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
             fileTmpName: reportTmpName,
             fileName: reportName,
             fileType: reportType,
-            channels: slackConfig.reporterBot.fileUploadChannel,
+            channels: slackReqObj.channel_id,
         });
 
         //call delete function after 30secs
@@ -121,7 +121,7 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
 
 export const generateQRCode = async (options) => {
     try {
-        let { msgToEncode, response_url } = options;
+        let { msgToEncode, response_url, channel_id } = options;
         if (msgToEncode === undefined || msgToEncode.trim() === "") {
             log.error(new Error(`msgToEncode: sent empty string to encode`));
             const response = {
@@ -148,17 +148,19 @@ export const generateQRCode = async (options) => {
                 },
             };
             let slackReqObj = {
-                response_url
+                response_url,
+                channel_id
             }
             generateCodesImplAsync(qrCodeParams, { slackReqObj });
 
             const response = {
-                response_url: slackReqObj.response_url,
+                responseUrl: slackReqObj.response_url,
                 replaceOriginal: false,
                 text: `Got it :thumbsup: Generating requested report *${qrCode.name}*\nPlease carry on, I'll notify you when I'm done.`,
                 mrkdwn: true,
                 mrkdwn_in: ['text'],
             };
+
 
             await postChatMessage(response)
                 .catch((err) => {
