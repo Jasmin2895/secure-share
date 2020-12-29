@@ -11,7 +11,7 @@ const slackConfig = config.get('slack');
 
 const QRCODE_CONFIG = {
     qrcode: {
-        name: "OR Code",
+        name: "QR Code",
         namePrefix: "qrCode",
         type: "png",
         func: getUserQRCodes,
@@ -141,7 +141,7 @@ export const generateQRCode = async (options) => {
             const qrCodeParams = {
                 reportName: qrCode.name,
                 reportTmpName: tempQrCodeName,
-                reportType: "png",
+                reportType: qrCode.type,
                 reportFilePath: qrCodeFilePath,
                 reportFunc() {
                     return qrCode.func({ qrCodeFilePath, msgToEncode });
