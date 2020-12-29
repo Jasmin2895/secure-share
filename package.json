@@ -1,0 +1,25 @@
+{
+  "name": "secure-share",
+  "version": "1.0.0",
+  "description": "A slack app which allows you to share sensitive data across slack more securely.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jasmin2895/secure-share.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jasmin2895/secure-share/issues"
+  },
+  "homepage": "https://github.com/Jasmin2895/secure-share#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "devDependencies": {}
+}
