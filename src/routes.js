@@ -3,7 +3,7 @@ import express from 'express';
 import { log } from './utils';
 const payloads = require('./payloads');
 const api = require("./api")
-import { generateQRCode } from './modules/reports';
+import { generateQRCode } from './modules/qrCodes';
 
 const router = new express.Router();
 const debug = require('debug')('slash-command-template:index');
