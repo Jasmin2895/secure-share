@@ -1,8 +1,10 @@
 import fs from 'fs';
 import config from 'config';
 import request from 'request';
+import { slack } from "../../../config/index"
 
 const slackConfig = config.get('slack');
+
 
 export const postChatMessage = message => new Promise((resolve, reject) => {
     const {
@@ -49,7 +51,7 @@ export const uploadFile = options => new Promise((resolve, reject) => {
     } = options;
 
     const payload = {
-        token: slackConfig.reporterBot.botToken,
+        token: slack.reporterBot.botToken,
         file: fs.createReadStream(filePath),
         channels,
         filetype: fileType,
@@ -58,7 +60,7 @@ export const uploadFile = options => new Promise((resolve, reject) => {
     };
 
     request.post({
-        url: slackConfig.fileUploadUrl,
+        url: slack.fileUploadUrl,
         formData: payload,
         json: true,
         headers: { "Content-Type": "application/x-www-form-urlencoded" }
@@ -82,12 +84,12 @@ export const deleteFile = options => new Promise((resolve, reject) => {
     } = options;
 
     const payload = {
-        token: slackConfig.reporterBot.botToken,
+        token: slack.reporterBot.botToken,
         file
     };
 
     request.post({
-        url: slackConfig.fileDeleteUrl,
+        url: slack.fileDeleteUrl,
         formData: payload,
         json: true,
         headers: { "Content-Type": "application/x-www-form-urlencoded" }

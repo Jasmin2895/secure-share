@@ -3,6 +3,7 @@ import config from 'config';
 
 import { log, delay, fileExists, getQRCodeFilesDir } from '../../utils';
 import { postChatMessage, uploadFile, deleteFile } from '../slack';
+import { slack } from "../../../config/index"
 
 // Reports
 import getUserQRCodes from './getUserQRCodes';

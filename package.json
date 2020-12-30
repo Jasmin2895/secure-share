@@ -37,7 +37,8 @@
     "qrcode": "^1.4.4",
     "querystring": "^0.2.0",
     "request": "^2.88.2",
-    "tracer": "^1.1.4"
+    "tracer": "^1.1.4",
+    "tsscmp": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
