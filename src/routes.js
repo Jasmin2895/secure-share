@@ -42,4 +42,8 @@ router.post('/slack/actions', async (req, res) => {
     }
 });
 
+router.get('/', async (req, res) => {
+    res.send("Hello from Node App")
+});
+
 export default router;
