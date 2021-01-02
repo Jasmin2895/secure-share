@@ -106,3 +106,6 @@ dist
 #development.json file in the config folder
 config/development.json
 config/production.json
+
+# add environment variables 
+.env

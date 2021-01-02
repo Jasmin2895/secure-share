@@ -1,10 +1,12 @@
+const dotenv = require("dotenv");
+dotenv.config();
 module.exports = {
     slack: {
         fileUploadUrl: "https://slack.com/api/files.upload",
         fileDeleteUrl: "https://slack.com/api/files.delete",
         reporterBot: {
-            botToken: "xoxb-1591117051333-1584590869863-9wrem0xNKqXBwsRe92sN9Gkj",
-            signingSecret: "a52508fc8ab10219dd9ea1af81814883"
+            botToken: process.env.SLACK_BOT_TOKEN,
+            signingSecret: process.env.SLACK_SIGNING_SECRET
         }
     }
 }
