@@ -1,5 +1,6 @@
 import express from 'express';
 const path = require('path');
+import request from 'request';
 import { slack } from "../config/index"
 
 import { log } from './utils';
