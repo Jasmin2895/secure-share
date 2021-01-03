@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
 router.get('/auth/redirect', (req, res) => {
     console.log("auth redirect req.query.code", req.query.code)
     var options = {
-        uri: 'https://slack.com/api/oauth.access?code='
+        uri: 'https://slack.com/api/oauth.v2.access?code='
             + req.query.code +
             '&client_id=' + slack.reporterBot.clientId +
             '&client_secret=' + slack.reporterBot.clientSecret +
