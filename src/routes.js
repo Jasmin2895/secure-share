@@ -1,5 +1,6 @@
 import express from 'express';
 const path = require('path');
+import { slack } from "../config/index"
 
 import { log } from './utils';
 const payloads = require('./payload');
@@ -44,7 +45,29 @@ router.post('/slack/actions', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
+    console.log("req", req.query)
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+router.get('/auth/redirect', (req, res) => {
+    console.log("auth redirect req.query.code", req.query.code)
+    var options = {
+        uri: 'https://slack.com/api/oauth.access?code='
+            + req.query.code +
+            '&client_id=' + slack.reporterBot.clientId +
+            '&client_secret=' + slack.reporterBot.clientSecret +
+            '&redirect_uri=' + slack.reporterBot.redirectURI,
+        method: 'GET'
+    }
+    request(options, (error, response, body) => {
+        var JSONresponse = JSON.parse(body)
+        if (!JSONresponse.ok) {
+            console.log(JSONresponse)
+            res.send("Error encountered: \n" + JSON.stringify(JSONresponse)).status(200).end()
+        } else {
+            console.log(JSONresponse)
+            res.send("Success!")
+        }
+    })
+})
 export default router;
