@@ -1,4 +1,5 @@
 import express from 'express';
+const path = require('path');
 
 import { log } from './utils';
 const payloads = require('./payload');
@@ -43,7 +44,7 @@ router.post('/slack/actions', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    res.send("Hello from Node App")
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 export default router;
