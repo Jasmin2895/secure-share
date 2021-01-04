@@ -81,7 +81,8 @@ export const uploadFile = options => new Promise((resolve, reject) => {
 
 export const deleteFile = options => new Promise((resolve, reject) => {
     const {
-        file
+        file,
+        token
     } = options;
 
     const payload = {

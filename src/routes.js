@@ -7,7 +7,7 @@ const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
 
-import { log, saveToDB } from './utils';
+import { log, saveToDB, getValueFromDB } from './utils';
 const payloads = require('./payload');
 const api = require("./api")
 import { generateQRCode } from './module/qrCodes';
@@ -17,9 +17,12 @@ const debug = require('debug')('slash-command-template:index');
 
 router.post('/slack/command/secure-share', async (req, res) => {
     try {
-        const { trigger_id } = req.body;
+        const { trigger_id, team_id } = req.body;
+        console.log("request body", req.body, team_id)
+        let botUser = getValueFromDB(team_id)
         let view = payloads.modal({
-            trigger_id
+            trigger_id,
+            token: botUser.token
         });
         let result = await api.callAPIMethod('views.open', view);
 
