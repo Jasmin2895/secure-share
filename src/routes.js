@@ -21,10 +21,9 @@ router.post('/slack/command/secure-share', async (req, res) => {
         console.log("request body", req.body, team_id)
         let botUser = getValueFromDB(team_id)
         let view = payloads.modal({
-            trigger_id,
-            token: botUser.token
+            trigger_id
         });
-        let result = await api.callAPIMethod('views.open', view);
+        let result = await api.callAPIMethod('views.open', view, botUser.token);
 
         debug('views.open: %o', result);
         return res.send('');
