@@ -1,9 +1,9 @@
 import fs from 'fs';
-import config from 'config';
+// import config from 'config';
 import request from 'request';
 import { slack } from "../../../config/index"
 
-const slackConfig = config.get('slack');
+// const slackConfig = config.get('slack');
 
 
 export const postChatMessage = message => new Promise((resolve, reject) => {
@@ -48,10 +48,11 @@ export const uploadFile = options => new Promise((resolve, reject) => {
         fileName,
         fileType,
         channels,
+        token
     } = options;
 
     const payload = {
-        token: slack.reporterBot.botToken,
+        token,
         file: fs.createReadStream(filePath),
         channels,
         filetype: fileType,
@@ -84,7 +85,7 @@ export const deleteFile = options => new Promise((resolve, reject) => {
     } = options;
 
     const payload = {
-        token: slack.reporterBot.botToken,
+        token,
         file
     };
 

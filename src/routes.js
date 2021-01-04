@@ -1,9 +1,13 @@
 import express from 'express';
-const path = require('path');
 import request from 'request';
 import { slack } from "../config/index"
+const path = require('path');
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const adapter = new FileSync('db.json')
+const db = low(adapter)
 
-import { log } from './utils';
+import { log, saveToDB } from './utils';
 const payloads = require('./payload');
 const api = require("./api")
 import { generateQRCode } from './module/qrCodes';
@@ -31,12 +35,13 @@ router.post('/slack/actions', async (req, res) => {
     try {
         const slackReqObj = JSON.parse(req.body.payload);
         let response;
+        let teamId = slackReqObj.team.id;
         let msgToEncode = slackReqObj.view.state.values["secure-share"]["secure-share-msg"].value
         let response_url = slackReqObj.response_urls[0].response_url
         let channel_id = slackReqObj.response_urls[0].channel_id
 
         if (slackReqObj.type === "view_submission") {
-            response = await generateQRCode({ msgToEncode, response_url, channel_id })
+            response = await generateQRCode({ msgToEncode, response_url, channel_id, teamId })
         }
         return res.send();
     } catch (err) {
@@ -47,6 +52,13 @@ router.post('/slack/actions', async (req, res) => {
 
 router.get('/', async (req, res) => {
     console.log("req", req.query)
+    console.log("db file", db.defaults)
+    db.get('posts')
+        .push({ id: 1, name: 'lowdb is awesome', token: "" })
+        .write()
+
+    let testReadVal = db.get('workspaces').find({ id: 1 }).value()
+    console.log("testReadVal", testReadVal)
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
@@ -60,14 +72,15 @@ router.get('/auth/redirect', (req, res) => {
             '&redirect_uri=' + slack.reporterBot.redirectURI,
         method: 'GET'
     }
-    request(options, (error, response, body) => {
+    request(options, async (error, response, body) => {
         var JSONresponse = JSON.parse(body)
         if (!JSONresponse.ok) {
             console.log(JSONresponse)
             res.send("Error encountered: \n" + JSON.stringify(JSONresponse)).status(200).end()
         } else {
-            console.log(JSONresponse)
-            res.send("Success!")
+            console.log("App is successfully added to your workspace!", JSONresponse)
+            await saveToDB({ id: JSONresponse.team.id, name: JSONresponse.team.name, token: JSONresponse.access_token })
+            res.send("Success, App is added to your workspace!")
         }
     })
 })

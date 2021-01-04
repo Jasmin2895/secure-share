@@ -1,14 +1,13 @@
 import path from 'path';
 import config from 'config';
 
-import { log, delay, fileExists, getQRCodeFilesDir } from '../../utils';
+import { log, delay, fileExists, getQRCodeFilesDir, getValueFromDB } from '../../utils';
 import { postChatMessage, uploadFile, deleteFile } from '../slack';
-import { slack } from "../../../config/index"
 
 // Reports
 import getUserQRCodes from './getUserQRCodes';
 
-const slackConfig = config.get('slack');
+// const slackConfig = config.get('slack');
 
 const QRCODE_CONFIG = {
     qrcode: {
@@ -58,12 +57,17 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
           Delay hack to ensure previous fs call is done processing file
         */
         await delay(250);
+        // find the workspace bot token with the help of team id
+        let botUser = getValueFromDB(slackReqObj.teamId)
+        console.log("botToken", botUser.token)
+
         const uploadedReport = await uploadFile({
             filePath: reportFilePath,
             fileTmpName: reportTmpName,
             fileName: reportName,
             fileType: reportType,
             channels: slackReqObj.channel_id,
+            token: botUser.token
         });
 
         //call delete function after 30secs
@@ -94,7 +98,7 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
         };
         // call delete function 30secs
         await setTimeout(async () => {
-            await deleteFile({ file: uploadedReport.file.id })
+            await deleteFile({ file: uploadedReport.file.id, token: botUser.token })
             await postChatMessage(deleteMessage)
                 .catch((err) => {
                     log.error(err);
@@ -122,7 +126,7 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
 
 export const generateQRCode = async (options) => {
     try {
-        let { msgToEncode, response_url, channel_id } = options;
+        let { msgToEncode, response_url, channel_id, teamId } = options;
         if (msgToEncode === undefined || msgToEncode.trim() === "") {
             log.error(new Error(`msgToEncode: sent empty string to encode`));
             const response = {
@@ -150,7 +154,8 @@ export const generateQRCode = async (options) => {
             };
             let slackReqObj = {
                 response_url,
-                channel_id
+                channel_id,
+                teamId
             }
             generateCodesImplAsync(qrCodeParams, { slackReqObj });
 

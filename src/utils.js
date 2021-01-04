@@ -4,6 +4,12 @@ import config from 'config';
 import morgan from 'morgan';
 import mkdirp from 'mkdirp';
 import tracer from 'tracer';
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const adapter = new FileSync('db.json')
+const db = low(adapter)
+
+const COLLECTION = "workspaces"
 
 export const log = (() => {
     const logger = tracer.colorConsole();
@@ -52,4 +58,16 @@ export const getQRCodeFilesDir = () => {
     } catch (error) {
         throw error;
     }
+}
+
+export const saveToDB = (payload) => {
+    db.get(COLLECTION)
+        .push(payload)
+        .write()
+
+    return true
+}
+
+export const getValueFromDB = (key) => {
+    return db.get(COLLECTION).find({ id: key }).value()
 }
