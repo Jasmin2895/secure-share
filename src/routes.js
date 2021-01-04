@@ -52,7 +52,6 @@ router.post('/slack/actions', async (req, res) => {
 
 router.get('/', async (req, res) => {
     console.log("req", req.query)
-    console.log("db file", db.defaults)
     db.get('posts')
         .push({ id: 1, name: 'lowdb is awesome', token: "" })
         .write()
