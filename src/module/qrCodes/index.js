@@ -98,6 +98,7 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
         };
         // call delete function 30secs
         await setTimeout(async () => {
+            console.log("bot user token inside setTimeout", botUser, botUser.token)
             await deleteFile({ file: uploadedReport.file.id, token: botUser.token })
             await postChatMessage(deleteMessage)
                 .catch((err) => {
