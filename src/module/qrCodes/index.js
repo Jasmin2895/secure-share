@@ -162,7 +162,7 @@ export const generateQRCode = async (options) => {
             const response = {
                 responseUrl: slackReqObj.response_url,
                 replaceOriginal: false,
-                text: `Got it :thumbsup: Generating requested QR Code *${qrCode.name}*\nPlease carry on, I'll notify you when I'm done.`,
+                text: `Got it :thumbsup: Generating requested file *${qrCode.name}*\nPlease carry on, I'll notify you when I'm done.`,
                 mrkdwn: true,
                 mrkdwn_in: ['text'],
             };
