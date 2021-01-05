@@ -74,11 +74,11 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
         const message = {
             responseUrl: slackReqObj.response_url,
             replaceOriginal: false,
-            text: 'Your report is ready!',
+            text: 'Your QR Code is ready!',
             attachments: [{
                 text: `<${uploadedReport.file.url_private}|${reportName}>`,
                 color: '#2c963f',
-                footer: 'Click report link to open menu with download option',
+                footer: 'Click the qr code link to open the file to download!',
             }],
         };
         await postChatMessage(message)
@@ -89,16 +89,15 @@ const generateCodesImplAsync = async (options, { slackReqObj }) => {
         const deleteMessage = {
             responseUrl: slackReqObj.response_url,
             replaceOriginal: false,
-            text: 'Your timelimit has expired the file is removed!',
+            text: 'Your timelimit to download file has expired, the file is removed!',
             attachments: [{
                 text: `Oops, file deleted!`,
                 color: '#2c963f',
-                footer: 'Click report link to open menu with download option',
+                footer: 'Attachment deleted!',
             }],
         };
         // call delete function 30secs
         await setTimeout(async () => {
-            console.log("bot user token inside setTimeout", botUser, botUser.token)
             await deleteFile({ file: uploadedReport.file.id, token: botUser.token })
             await postChatMessage(deleteMessage)
                 .catch((err) => {
@@ -163,7 +162,7 @@ export const generateQRCode = async (options) => {
             const response = {
                 responseUrl: slackReqObj.response_url,
                 replaceOriginal: false,
-                text: `Got it :thumbsup: Generating requested report *${qrCode.name}*\nPlease carry on, I'll notify you when I'm done.`,
+                text: `Got it :thumbsup: Generating requested QR Code *${qrCode.name}*\nPlease carry on, I'll notify you when I'm done.`,
                 mrkdwn: true,
                 mrkdwn_in: ['text'],
             };
