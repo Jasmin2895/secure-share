@@ -18,7 +18,6 @@ const debug = require('debug')('slash-command-template:index');
 router.post('/slack/command/secure-share', async (req, res) => {
     try {
         const { trigger_id, team_id } = req.body;
-        console.log("request body", req.body, team_id)
         let botUser = getValueFromDB(team_id)
         let view = payloads.modal({
             trigger_id
@@ -53,18 +52,10 @@ router.post('/slack/actions', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    console.log("req", req.query)
-    db.get('posts')
-        .push({ id: 1, name: 'lowdb is awesome', token: "" })
-        .write()
-
-    let testReadVal = db.get('workspaces').find({ id: 1 }).value()
-    console.log("testReadVal", testReadVal)
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 router.get('/auth/redirect', (req, res) => {
-    console.log("auth redirect req.query.code", req.query.code)
     var options = {
         uri: 'https://slack.com/api/oauth.v2.access?code='
             + req.query.code +
