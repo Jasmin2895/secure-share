@@ -1,10 +1,6 @@
 import fs from 'fs';
-// import config from 'config';
 import request from 'request';
 import { slack } from "../../../config/index"
-
-// const slackConfig = config.get('slack');
-
 
 export const postChatMessage = message => new Promise((resolve, reject) => {
     const {
