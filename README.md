@@ -17,4 +17,4 @@ A slack app which allows you to share sensitive data across slack more securely 
 
 ## Deployed on 
 
- ![Deploy to DO](https://mp-assets1.sfo2.digitaloceanspaces.com/deploy-to-do/do-btn-blue.svg)
+ [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/Jasmin2895/secure-share/tree/main)
